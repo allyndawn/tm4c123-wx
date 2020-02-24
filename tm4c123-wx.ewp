@@ -773,7 +773,7 @@
                 </option>
                 <option>
                     <name>IlinkIcfFile</name>
-                    <state></state>
+                    <state>$TOOLKIT_DIR$\config\linker\TexasInstruments\TM4C123GH6.icf</state>
                 </option>
                 <option>
                     <name>IlinkIcfFileSlave</name>
@@ -833,7 +833,7 @@
                 </option>
                 <option>
                     <name>IlinkProgramEntryLabel</name>
-                    <state></state>
+                    <state>__iar_program_start</state>
                 </option>
                 <option>
                     <name>DoFill</name>
@@ -1006,7 +1006,7 @@
                 </option>
                 <option>
                     <name>IlinkTrustzoneImportLibraryOut</name>
-                    <state>###Unitialized###</state>
+                    <state>tm4c123-wx_import_lib.o</state>
                 </option>
                 <option>
                     <name>OILinkExtraOption</name>
@@ -2112,6 +2112,12 @@
             <data />
         </settings>
     </configuration>
+    <file>
+        <name>$PROJ_DIR$\cstartup_M.c</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\ds18b20.c</name>
+    </file>
     <file>
         <name>$PROJ_DIR$\main.c</name>
     </file>

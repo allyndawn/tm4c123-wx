@@ -2372,6 +2372,12 @@
         </settings>
     </configuration>
     <file>
+        <name>$PROJ_DIR$\cstartup_M.c</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\ds18b20.c</name>
+    </file>
+    <file>
         <name>$PROJ_DIR$\main.c</name>
     </file>
 </project>

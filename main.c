@@ -9,28 +9,42 @@
 
 #include "stdint.h"
 #include "tm4c123gh6pm.h"
+#include "ds18b20.h"
 
-#define PF2 (*((volatile uint32_t *)0x40025010))
+volatile int16_t tempTenths;
 
-int main(void)
-{
-	// Activate clock for Port F
-	SYSCTL_RCGCGPIO_R |= 0x00000020;
+void Init( void ) {
+	tempTenths = DS18B20_NO_READING;
+}
 
-	// Allow time for clock to stabilize
-	while ((SYSCTL_PRGPIO_R&0x20) == 0)
-	{
-	}
+void Timer0A_Init( void ) {
+	// TODO set up a 1 us timer to service the thermometer queue
+}
 
-	// Set PF2 for out
-	GPIO_PORTF_DIR_R |= 0x04;
+void Timer0A_Handler( void ) {
+	// TODO set up a 15 second timer to update the temperature measurement
+	// TODO Acknowledge the interrupt
+	DS18B20_TickHandler();
+}
 
-	// Enable digital I/O on PF2
-	GPIO_PORTF_DEN_R |= 0x04;
+void Timer0B_Init( void ) {
+}
 
-	while ( 1 )
-	{
-		// Toggle PF2 - the blue LED
-		PF2 ^= 0x04;
+void Timer0B_Handler( void ) {
+	// TODO Acknowledge the interrupt
+	tempTenths = DS18B20_GetTempTenths();
+}
+
+int main( void ) {
+	Init();
+
+	DS18B20_Init();
+
+	Timer0A_Init();
+	Timer0B_Init();
+
+	DS18B20_InitiateMeasurement();
+
+	while ( 1 ) {
 	}
 }
