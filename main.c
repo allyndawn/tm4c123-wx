@@ -11,39 +11,87 @@
 #include "tm4c123gh6pm.h"
 #include "ds18b20.h"
 
-volatile int16_t tempTenths;
+#define PF2 (*((volatile uint32_t *)0x40025010))
 
-void Init( void ) {
-	tempTenths = DS18B20_NO_READING;
+void Init() {
+	// Activate clock for Port F
+	SYSCTL_RCGCGPIO_R |= 0x00000020;
+
+	// Allow time for clock to stabilize
+	while ((SYSCTL_PRGPIO_R & 0x20) == 0)
+	{
+	}
+
+	// Set PF2 for out
+	GPIO_PORTF_DIR_R |= 0x04;
+
+	// Enable digital I/O on PF2
+	GPIO_PORTF_DEN_R |= 0x04;
+
+	// Turn the LED on
+	PF2 = 0x04;
 }
 
-void Timer0A_Init( void ) {
-	// TODO set up a 1 us timer to service the thermometer queue
+// Temporary until we hook this up properly
+// Request an updated temperature once per second
+// When we do this for reals, we won't need to
+// sample nearly this quickly.
+void Timer1A_Init() {
+	volatile unsigned long delay;
+
+	// Activate timer 1
+	SYSCTL_RCGCTIMER_R |= 0x02;
+
+	// Wait for the timer to settle
+	// TODO Is there a better way to do this?
+	delay = SYSCTL_RCGCTIMER_R;
+
+	// Disable timer during setup
+	TIMER1_CTL_R &= ~TIMER_CTL_TAEN;
+
+	// Configure for 32-bit timer mode
+	TIMER1_CFG_R = TIMER_CFG_32_BIT_TIMER;
+
+	// Configure for a periodic timer
+	TIMER1_TAMR_R = TIMER_TAMR_TAMR_PERIOD;
+
+	// No prescaling
+	TIMER1_TAPR_R = 0;
+
+	// Assuming a 16 MHz clock, set the initial counting value
+	// (8000000 -> 0x7A1200 -> 2 Hz
+	TIMER1_TAILR_R = 0x7A1200;
+
+	// Enable timeout (rollover) interrupt
+	TIMER1_IMR_R |= TIMER_IMR_TATOIM;
+
+	// Clear any lingering timer timeout flag
+	TIMER1_ICR_R = TIMER_ICR_TATOCINT;
+
+	// Set timer priority to 3
+	NVIC_PRI5_R = (NVIC_PRI5_R & 0xFFFF00FF) | 0x00006000;
+
+	// Timer 1A uses interrupt 21 - enable it in NVIC
+	NVIC_EN0_R = 1 << 21;
+
+	// Enable the timer
+	TIMER1_CTL_R |= TIMER_CTL_TAEN;
 }
 
-void Timer0A_Handler( void ) {
-	// TODO set up a 15 second timer to update the temperature measurement
-	// TODO Acknowledge the interrupt
-	DS18B20_TickHandler();
-}
+void Timer1A_Handler() {
+	// Acknowledge interrupt
+	TIMER1_ICR_R = TIMER_ICR_TATOCINT;
 
-void Timer0B_Init( void ) {
-}
+	DS18B20_InitiateMeasurement();
 
-void Timer0B_Handler( void ) {
-	// TODO Acknowledge the interrupt
-	tempTenths = DS18B20_GetTempTenths();
+	PF2 ^= 0x04; // Toggle the LED
 }
 
 int main( void ) {
 	Init();
+	Timer1A_Init();
 
 	DS18B20_Init();
-
-	Timer0A_Init();
-	Timer0B_Init();
-
-	DS18B20_InitiateMeasurement();
 
 	while ( 1 ) {
 	}

@@ -10,8 +10,9 @@
 #define DS18B20_NO_READING -9999
 
 void DS18B20_Init( void );
-void DS18B20_TickHandler( void );
+
 void DS18B20_InitiateMeasurement( void );
+
 int16_t DS18B20_GetTempTenths( void );
 
 
