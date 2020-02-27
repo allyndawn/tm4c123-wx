@@ -716,7 +716,7 @@
                     <item>tasks[0].type</item>
                     <item>currentTask</item>
                     <item>microseconds</item>
-                    <item></item>
+                    <item />
                 </expressions>
                 <col-names>
                     <item>Expression</item>
