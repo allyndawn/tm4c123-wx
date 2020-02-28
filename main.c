@@ -10,6 +10,7 @@
 #include "stdint.h"
 #include "tm4c123gh6pm.h"
 #include "ds18b20.h"
+#include "gps.h"
 
 #define PF2 (*((volatile uint32_t *)0x40025010))
 
@@ -88,10 +89,15 @@ void Timer1A_Handler() {
 }
 
 int main( void ) {
+	// Initialize the main application polling timer
 	Init();
 	Timer1A_Init();
 
+	// Initialize the thermometer
 	DS18B20_Init();
+
+	// Initialize the GPS
+	GPS_Init();
 
 	while ( 1 ) {
 	}

@@ -25,6 +25,7 @@ extern void PendSV_Handler( void );
 extern void SysTick_Handler( void );
 extern void OneWire_Timer0A_Handler( void ); // Added
 extern void Timer1A_Handler( void ); // Added
+extern void UART1_Handler( void ); // Added
 
 typedef void( *intfunc )( void );
 typedef union { intfunc __fun; void * __ptr; } intvec_elem;
@@ -65,7 +66,7 @@ const intvec_elem __vector_table[] =
   0,
   0,
   0, // IRQ 5
-  0,
+  UART1_Handler,
   0,
   0,
   0,
@@ -114,6 +115,8 @@ __weak void SysTick_Handler( void ) { while (1) {} }
 __weak void OneWire_Timer0A_Handler( void ) { while (1) {} } // Added
 #pragma call_graph_root = "interrupt"
 __weak void Timer1A_Handler( void ) { while (1) {} } // Added
+#pragma call_graph_root = "interrupt"
+__weak void UART1_Handler( void ) { while (1) {} } // Added
 
 void __cmain( void );
 __weak void __iar_init_core( void );

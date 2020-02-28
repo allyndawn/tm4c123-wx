@@ -15,5 +15,4 @@ void DS18B20_InitiateMeasurement( void );
 
 int16_t DS18B20_GetTempTenths( void );
 
-
 #endif // __DS18B20_H
