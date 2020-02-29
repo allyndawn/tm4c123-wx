@@ -23,7 +23,7 @@ void _UART_Clear_Buffer() {
 }
 
 void _UART_AddToBuffer( char data ) {
-	if ( 0x0A == data ) {
+	if ( ( 0x0A == data ) || ( 0x0D == data ) ) {
 		// end of line
 		if ( UART_Receive_Callback ) {
 			buffer[bytesReceived] = 0;

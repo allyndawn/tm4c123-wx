@@ -11,5 +11,8 @@
 #include "stdint.h"
 
 void GPS_Init();
+uint8_t GPS_Is_Ready();
+void GPS_Get_DateTime( char *dateString, char *timeString );
+void GPS_Get_Location( char *latString, char *latHem, char *longString, char *longHem );
 
 #endif // __GPS_H

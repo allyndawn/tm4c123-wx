@@ -11,6 +11,16 @@
 #include "tm4c123gh6pm.h"
 #include "ds18b20.h"
 #include "gps.h"
+#include "stdio.h"
+
+char dateString[12];
+char timeString[12];
+char latString[12];
+char latHem[12];
+char longString[12];
+char longHem[12];
+
+uint8_t decimation = 0;
 
 #define PF2 (*((volatile uint32_t *)0x40025010))
 
@@ -82,10 +92,29 @@ void Timer1A_Init() {
 void Timer1A_Handler() {
 	// Acknowledge interrupt
 	TIMER1_ICR_R = TIMER_ICR_TATOCINT;
-
-	DS18B20_InitiateMeasurement();
-
 	PF2 ^= 0x04; // Toggle the LED
+
+	// Every 10 seconds
+	if ( 0 == decimation % 10 ) {
+		if ( ! GPS_Is_Ready() ) {
+			printf( "GPS not ready\n" );
+		} else {
+			GPS_Get_DateTime( dateString, timeString );
+			GPS_Get_Location( latString, latHem, longString, longHem );
+			printf( "%s %s %s %s %s %s\n", dateString, timeString, latString, latHem, longString, longHem );
+		}
+	}
+
+	// Every 60 seconds
+	if ( 0 == decimation % 60 ) {
+		DS18B20_InitiateMeasurement();
+		// TODO - display last measurement
+	}
+
+	decimation++;
+	if ( 59 < decimation ) {
+		decimation = 0;
+	}
 }
 
 int main( void ) {
