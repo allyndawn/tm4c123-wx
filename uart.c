@@ -13,7 +13,6 @@
 #define UART_MAX_BUFFER 200
 static char buffer[UART_MAX_BUFFER];
 static uint16_t bytesReceived;
-static uint16_t full = 0;
 
 static void (*UART_Receive_Callback)(char *data);
 

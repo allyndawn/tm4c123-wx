@@ -2387,6 +2387,12 @@
         <name>$PROJ_DIR$\onewire.c</name>
     </file>
     <file>
+        <name>$PROJ_DIR$\pwm-i2c.c</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\rda1846.c</name>
+    </file>
+    <file>
         <name>$PROJ_DIR$\uart.c</name>
     </file>
 </project>

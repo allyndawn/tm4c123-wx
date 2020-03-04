@@ -723,7 +723,7 @@
                     <item>bytesReceived</item>
                     <item>data</item>
                     <item>commaCount</item>
-                    <item></item>
+                    <item />
                 </expressions>
                 <col-names>
                     <item>Expression</item>

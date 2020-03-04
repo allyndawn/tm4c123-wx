@@ -26,6 +26,7 @@ extern void SysTick_Handler( void );
 extern void OneWire_Timer0A_Handler( void ); // Added
 extern void Timer1A_Handler( void ); // Added
 extern void UART1_Handler( void ); // Added
+extern void PWM_I2C_Timer2A_Handler( void); // Added
 
 typedef void( *intfunc )( void );
 typedef union { intfunc __fun; void * __ptr; } intvec_elem;
@@ -83,7 +84,7 @@ const intvec_elem __vector_table[] =
   0,
   Timer1A_Handler, // IRQ 21
   0,
-  0,
+  PWM_I2C_Timer2A_Handler, // IRQ 23
   0,
   0, // IRQ 25
   0,
@@ -117,6 +118,8 @@ __weak void OneWire_Timer0A_Handler( void ) { while (1) {} } // Added
 __weak void Timer1A_Handler( void ) { while (1) {} } // Added
 #pragma call_graph_root = "interrupt"
 __weak void UART1_Handler( void ) { while (1) {} } // Added
+#pragma call_graph_root = "interrupt"
+__weak void PWM_I2C_Timer2A_Handler( void ) { while (1) {} } // Added
 
 void __cmain( void );
 __weak void __iar_init_core( void );

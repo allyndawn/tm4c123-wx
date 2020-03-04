@@ -8,10 +8,13 @@
 // 23 February 2020
 
 #include "stdint.h"
+#include "stdio.h"
+
 #include "tm4c123gh6pm.h"
+
 #include "ds18b20.h"
 #include "gps.h"
-#include "stdio.h"
+#include "rda1846.h"
 
 char dateString[12];
 char timeString[12];
@@ -127,6 +130,9 @@ int main( void ) {
 
 	// Initialize the GPS
 	GPS_Init();
+
+	// Initialize the Radio
+	RDA1846_Init();
 
 	while ( 1 ) {
 	}
