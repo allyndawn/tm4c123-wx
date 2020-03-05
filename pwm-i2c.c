@@ -155,6 +155,9 @@ void _PWM_I2C_Write( uint8_t address, uint16_t data, uint16_t mask ) {
  * Grabs the next command in the queue, performs it
  */
 void PWM_I2C_Timer2A_Handler() {
+	// Acknowledge the interrupt
+		TIMER2_ICR_R = TIMER_ICR_TATOCINT;
+
 	// No commands? Just return
 	if ( 0 == commandCount ) {
 		return;
@@ -162,12 +165,12 @@ void PWM_I2C_Timer2A_Handler() {
 
 	// Grab the next command in the queue
 	// If no more commands, reset the queue and call the callback
-
 	if ( currentCommandIndex >= commandCount ) {
 		commandCount = 0;
 		currentCommandIndex = 0;
 		if ( pwm_i2c_callback ) {
 			pwm_i2c_callback();
+			return;
 		}
 	}
 

@@ -95,12 +95,13 @@ void Timer1A_Init() {
 void Timer1A_Handler() {
 	// Acknowledge interrupt
 	TIMER1_ICR_R = TIMER_ICR_TATOCINT;
+
 	PF2 ^= 0x04; // Toggle the LED
 
 	// Every 10 seconds
 	if ( 0 == decimation % 10 ) {
 		if ( ! GPS_Is_Ready() ) {
-			printf( "GPS not ready\n" );
+			printf( "NO GPS\n" );
 		} else {
 			GPS_Get_DateTime( dateString, timeString );
 			GPS_Get_Location( latString, latHem, longString, longHem );
