@@ -5,107 +5,84 @@
     <configuration>
         <name>Debug</name>
         <outputs>
+            <file>$PROJ_DIR$\cstartup_M.c</file>
             <file>$PROJ_DIR$\ds18b20.c</file>
             <file>$PROJ_DIR$\gps.c</file>
             <file>$PROJ_DIR$\main.c</file>
-            <file>$PROJ_DIR$\cstartup_M.c</file>
-            <file>$TOOLKIT_DIR$\inc\c\ysizet.h</file>
-            <file>$TOOLKIT_DIR$\lib\m7M_tls.a</file>
-            <file>$TOOLKIT_DIR$\config\linker\TexasInstruments\TM4C123GH6.icf</file>
-            <file>$PROJ_DIR$\Debug\Obj\gps.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\main.__cstat.et</file>
-            <file>$TOOLKIT_DIR$\inc\c\ycheck.h</file>
-            <file>$PROJ_DIR$\onewire.cpp</file>
-            <file>$TOOLKIT_DIR$\inc\c\yvals.h</file>
-            <file>$TOOLKIT_DIR$\lib\dl7M_tln.a</file>
             <file>$PROJ_DIR$\onewire.c</file>
-            <file>$TOOLKIT_DIR$\inc\c\stdio.h</file>
-            <file>$PROJ_DIR$\Debug\Exe\tm4c123-wx.out</file>
-            <file>$TOOLKIT_DIR$\inc\c\DLib_Product_string.h</file>
-            <file>$PROJ_DIR$\Debug\Obj\tm4c123-onewire.o</file>
-            <file>$PROJ_DIR$\Debug\List\tm4c123-wx.map</file>
-            <file>$TOOLKIT_DIR$\inc\c\DLib_Product.h</file>
-            <file>$PROJ_DIR$\Debug\Obj\pwm-i2c.xcl</file>
-            <file>$PROJ_DIR$\Debug\Obj\cstartup_M.xcl</file>
-            <file>$PROJ_DIR$\uart.c</file>
-            <file>$PROJ_DIR$\Debug\Obj\onewire.xcl</file>
             <file>$PROJ_DIR$\pwm-i2c.c</file>
+            <file>$TOOLKIT_DIR$\inc\c\ycheck.h</file>
             <file>$PROJ_DIR$\Debug\Obj\cstartup_M.o</file>
-            <file>$PROJ_DIR$\..\..\..\..\ti\TivaWare_C_Series-2.1.4.178\inc\tm4c123gh6pm.h</file>
-            <file>$PROJ_DIR$\Debug\Obj\gps.xcl</file>
-            <file>$PROJ_DIR$\Debug\Obj\onewire.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\gps.o</file>
+            <file>$TOOLKIT_DIR$\inc\c\yvals.h</file>
             <file>$PROJ_DIR$\Debug\Obj\main.xcl</file>
-            <file>$PROJ_DIR$\Debug\Obj\ds18b20.xcl</file>
             <file>$TOOLKIT_DIR$\inc\c\DLib_Config_Normal.h</file>
-            <file>$PROJ_DIR$\rda1846.c</file>
             <file>$TOOLKIT_DIR$\inc\c\DLib_Defaults.h</file>
             <file>$PROJ_DIR$\Debug\Obj\ds18b20.o</file>
             <file>$PROJ_DIR$\tm4c123-onewire.h</file>
             <file>$TOOLKIT_DIR$\lib\rt7M_tl.a</file>
-            <file>$PROJ_DIR$\Debug\Obj\onewire.__cstat.et</file>
+            <file>$TOOLKIT_DIR$\inc\c\ysizet.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\main.__cstat.et</file>
+            <file>$TOOLKIT_DIR$\inc\c\DLib_Product.h</file>
+            <file>$TOOLKIT_DIR$\lib\dl7M_tln.a</file>
+            <file>$TOOLKIT_DIR$\inc\c\stdio.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\tm4c123-onewire.o</file>
+            <file>$PROJ_DIR$\Debug\Exe\tm4c123-wx.out</file>
+            <file>$TOOLKIT_DIR$\lib\m7M_tls.a</file>
+            <file>$PROJ_DIR$\Debug\List\tm4c123-wx.map</file>
+            <file>$PROJ_DIR$\onewire.cpp</file>
+            <file>$PROJ_DIR$\Debug\Obj\cstartup_M.xcl</file>
+            <file>$PROJ_DIR$\..\..\..\..\ti\TivaWare_C_Series-2.1.4.178\inc\tm4c123gh6pm.h</file>
+            <file>$TOOLKIT_DIR$\config\linker\TexasInstruments\TM4C123GH6.icf</file>
+            <file>$PROJ_DIR$\Debug\Obj\gps.xcl</file>
+            <file>$PROJ_DIR$\Debug\Obj\onewire.o</file>
+            <file>$TOOLKIT_DIR$\inc\c\DLib_Product_string.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\pwm-i2c.xcl</file>
+            <file>$PROJ_DIR$\Debug\Obj\ds18b20.xcl</file>
+            <file>$PROJ_DIR$\rda1846.c</file>
+            <file>$PROJ_DIR$\Debug\Obj\onewire.xcl</file>
+            <file>$PROJ_DIR$\uart.c</file>
             <file>$PROJ_DIR$\gps.h</file>
-            <file>$PROJ_DIR$\Debug\Obj\cstartup_M.__cstat.et</file>
-            <file>$PROJ_DIR$\Debug\Obj\main.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\rda1846.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\i2c.xcl</file>
             <file>$PROJ_DIR$\rda1846.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\pwm-i2c.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\main.o</file>
             <file>$PROJ_DIR$\Debug\Obj\uart.__cstat.et</file>
-            <file>$PROJ_DIR$\Debug\Obj\uart.xcl</file>
-            <file>$PROJ_DIR$\uart.h</file>
-            <file>$PROJ_DIR$\Debug\Obj\tm4c123-onewire.xcl</file>
             <file>$PROJ_DIR$\Debug\Obj\rda1846.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\uart.xcl</file>
             <file>$PROJ_DIR$\Debug\Obj\ds18b20.__cstat.et</file>
             <file>$PROJ_DIR$\Debug\Obj\gps.__cstat.et</file>
-            <file>$PROJ_DIR$\Debug\Obj\i2c.o</file>
-            <file>$TOOLKIT_DIR$\inc\c\string.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\cstartup_M.__cstat.et</file>
             <file>$PROJ_DIR$\Debug\Obj\rda1846.xcl</file>
-            <file>$PROJ_DIR$\Debug\Obj\tm4c123-wx.pbd</file>
             <file>$PROJ_DIR$\i2c.c</file>
+            <file>$PROJ_DIR$\Debug\Obj\tm4c123-onewire.xcl</file>
             <file>$PROJ_DIR$\pwm-i2c.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\tm4c123-wx.pbd</file>
             <file>$TOOLKIT_DIR$\inc\c\stdint.h</file>
             <file>$PROJ_DIR$\Debug\Obj\pwm-i2c.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\i2c.o</file>
             <file>$PROJ_DIR$\tm4c123-onewire.cpp</file>
             <file>$PROJ_DIR$\ds18b20.h</file>
             <file>$PROJ_DIR$\tm4c123-onewire.c</file>
+            <file>$PROJ_DIR$\uart.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\onewire.__cstat.et</file>
+            <file>$TOOLKIT_DIR$\inc\c\string.h</file>
             <file>$TOOLKIT_DIR$\lib\shb_l.a</file>
             <file>$PROJ_DIR$\Debug\Obj\uart.o</file>
             <file>$PROJ_DIR$\onewire.h</file>
-            <file>$PROJ_DIR$\Debug\Obj\rda1846.__cstat.et</file>
-            <file>$PROJ_DIR$\Debug\Obj\i2c.xcl</file>
-            <file>$PROJ_DIR$\Debug\Obj\pwm-i2c.__cstat.et</file>
         </outputs>
         <file>
             <name>[ROOT_NODE]</name>
             <outputs>
                 <tool>
                     <name>ILINK</name>
-                    <file> 15 18</file>
+                    <file> 22 24</file>
                 </tool>
             </outputs>
         </file>
         <file>
-            <name>$PROJ_DIR$\ds18b20.c</name>
-            <outputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 34</file>
-                </tool>
-                <tool>
-                    <name>__cstat</name>
-                    <file> 47</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 30</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 58 55 9 11 33 31 19 62 14 4</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\gps.c</name>
+            <name>$PROJ_DIR$\cstartup_M.c</name>
             <outputs>
                 <tool>
                     <name>ICCARM</name>
@@ -117,26 +94,43 @@
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 27</file>
+                    <file> 26</file>
+                </tool>
+            </outputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\ds18b20.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 13</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 46</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 33</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 38 55 9 11 33 31 19 44 50 4 16</file>
+                    <file> 58 54 6 9 12 11 18 65 20 16</file>
                 </tool>
             </inputs>
         </file>
         <file>
-            <name>$PROJ_DIR$\main.c</name>
+            <name>$PROJ_DIR$\gps.c</name>
             <outputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 40</file>
+                    <file> 8</file>
                 </tool>
                 <tool>
                     <name>__cstat</name>
-                    <file> 8</file>
+                    <file> 47</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
@@ -146,98 +140,53 @@
             <inputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 55 9 11 33 31 19 14 4 26 58 38 41</file>
+                    <file> 37 54 6 9 12 11 18 60 62 16 31</file>
                 </tool>
             </inputs>
         </file>
         <file>
-            <name>$PROJ_DIR$\cstartup_M.c</name>
+            <name>$PROJ_DIR$\main.c</name>
             <outputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 25</file>
+                    <file> 42</file>
                 </tool>
                 <tool>
                     <name>__cstat</name>
-                    <file> 39</file>
+                    <file> 17</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 21</file>
+                    <file> 10</file>
                 </tool>
             </outputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\onewire.cpp</name>
-            <outputs>
+            <inputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 28</file>
+                    <file> 54 6 9 12 11 18 20 16 27 58 37 40</file>
                 </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 23</file>
-                </tool>
-            </outputs>
+            </inputs>
         </file>
         <file>
             <name>$PROJ_DIR$\onewire.c</name>
             <outputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 28</file>
+                    <file> 30</file>
                 </tool>
                 <tool>
                     <name>__cstat</name>
-                    <file> 37</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 23</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 62 55 9 11 33 31 19 26 14 4</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\Debug\Exe\tm4c123-wx.out</name>
-            <outputs>
-                <tool>
-                    <name>ILINK</name>
-                    <file> 18</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ILINK</name>
-                    <file> 6 25 34 7 40 28 56 46 61 60 36 5 12</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\uart.c</name>
-            <outputs>
-                <tool>
-                    <name>ICCARM</name>
                     <file> 61</file>
                 </tool>
                 <tool>
-                    <name>__cstat</name>
-                    <file> 42</file>
-                </tool>
-                <tool>
                     <name>BICOMP</name>
-                    <file> 43</file>
+                    <file> 35</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 44 55 9 11 33 31 19 26</file>
+                    <file> 65 54 6 9 12 11 18 27 20 16</file>
                 </tool>
             </inputs>
         </file>
@@ -246,34 +195,117 @@
             <outputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 56</file>
+                    <file> 55</file>
                 </tool>
                 <tool>
                     <name>__cstat</name>
-                    <file> 65</file>
+                    <file> 41</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 20</file>
+                    <file> 32</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 54 55 9 11 33 31 19 26</file>
+                    <file> 52 54 6 9 12 11 18 27</file>
                 </tool>
             </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\Debug\Exe\tm4c123-wx.out</name>
+            <outputs>
+                <tool>
+                    <name>ILINK</name>
+                    <file> 24</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ILINK</name>
+                    <file> 28 7 13 8 42 30 55 44 64 63 15 23 19</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\onewire.cpp</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 30</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 35</file>
+                </tool>
+            </outputs>
         </file>
         <file>
             <name>$PROJ_DIR$\rda1846.c</name>
             <outputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 46</file>
+                    <file> 44</file>
                 </tool>
                 <tool>
                     <name>__cstat</name>
-                    <file> 63</file>
+                    <file> 38</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 49</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 40 54 6 9 12 11 18 52</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\uart.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 64</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 43</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 45</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 60 54 6 9 12 11 18 27</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\i2c.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 56</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 39</file>
+                </tool>
+            </outputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\tm4c123-onewire.cpp</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 21</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
@@ -283,39 +315,7 @@
             <inputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 41 55 9 11 33 31 19 54</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\i2c.c</name>
-            <outputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 49</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 64</file>
-                </tool>
-            </outputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\tm4c123-onewire.cpp</name>
-            <outputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 17</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 45</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 35 55 9 11 33 31 19</file>
+                    <file> 14 54 6 9 12 11 18</file>
                 </tool>
             </inputs>
         </file>
@@ -324,17 +324,17 @@
             <outputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 17</file>
+                    <file> 21</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 45</file>
+                    <file> 51</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 35 55 9 11 33 31 19</file>
+                    <file> 14 54 6 9 12 11 18</file>
                 </tool>
             </inputs>
         </file>

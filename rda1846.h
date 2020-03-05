@@ -9,5 +9,9 @@
 #include "stdint.h"
 
 void RDA1846_Init();
+void RDA1846_Set_Squelch( uint8_t on );
+void RDA1846_Set_Frequency_KHz( uint32_t freqKHZ );
+void RDA1846_Set_Volume( uint16_t volume1, uint16_t volume2 );
+
 
 #endif // __RDA1846_H

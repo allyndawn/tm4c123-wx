@@ -11,8 +11,12 @@
 
 #define RDA1846_CLK_MODE_R 0x04
 #define RDA1846_GPIO_MODE_R 0x1F
+#define RDA1846_FREQ_HI_R 0x29
+#define RDA1846_FREQ_LO_R 0x2A
 #define RDA1846_CTL_R 0x30
 #define RDA1846_TX_VOICE_R 0x3A
+#define RDA1846_RX_VOLUME_R 0x44
+#define RDA1846_SQ_THRESH_R 0x49
 
 // Private methods
 
@@ -69,7 +73,7 @@ void _RDA1846_Set_Clock_Mode( uint8_t mode ) {
 	}
 }
 
-void _RDA1846_Set_TX() {
+void RDA1846_Set_TX() {
 	// TODO: Add 70cm support
 
 	// Disable RX (Clear b:5)
@@ -85,9 +89,9 @@ void _RDA1846_Set_TX() {
 	PWM_I2C_Queue_Command( RDA1846_CTL_R, 0x0040, 0xFFBF, 0 );
 }
 
-void _RDA1846_Set_RX() {
+void RDA1846_Set_RX() {
 	// Disable TX (Clear b:6)
-	PWM_I2C_Queue_Command( RDA1846_CTL_R, 0, 0x0040, 0 );
+	PWM_I2C_Queue_Command( RDA1846_CTL_R, 0, 0xFFBF, 0 );
 
 	// Set GPIO 5 (b:11) Low
 	PWM_I2C_Queue_Command( RDA1846_GPIO_MODE_R, 0, 0xF7FF, 0 );
@@ -103,13 +107,26 @@ void _RDA1846_Set_Transmit_Source_PWM_Mic() {
 	PWM_I2C_Queue_Command( RDA1846_TX_VOICE_R, 0x4, 0xFFFF, 0 );
 }
 
-void _RDA1846_Set_Squelch( uint8_t on ) {
-	// Turn squelch on (Set b: 3)
-	PWM_I2C_Queue_Command( RDA1846_CTL_R, 0x0008, 0xFFF7, 0 );
+void RDA1846_Set_Squelch( uint8_t on ) {
+	if ( 0 != on ) {
+		// Turn squelch on (Set b: 3)
+		PWM_I2C_Queue_Command( RDA1846_CTL_R, 0x0008, 0xFFF7, 0 );
+	} else {
+		// Turn squelch off (Clear b: 3)
+		PWM_I2C_Queue_Command( RDA1846_CTL_R, 0x0, 0xFFF7, 0 );
+	}
 }
 
-void _RDA1846_Set_Squelch_Low_Threshhold( int16_t threshhold ) {
-	// TODO
+void _RDA1846_Set_Squelch_Threshholds( int16_t openThreshhold, int16_t shutThreshhold ) {
+	// Open: bits 13:7
+	// Shut: bits 6:0
+
+	openThreshhold += 137;
+	shutThreshhold += 137;
+
+	uint16_t threshhold = ( openThreshhold << 7 ) | ( shutThreshhold & 0x3F );
+
+	PWM_I2C_Queue_Command( RDA1846_SQ_THRESH_R, threshhold, 0xFFFF, 0 );
 }
 
 void _RDA1846_Get_RSSI() {
@@ -122,9 +139,28 @@ void RDA1846_Wait_For_Channel( /* callback */ ) {
 }
 
 void RDA1846_Set_Frequency_KHz( uint32_t freqKHZ ) {
+	uint32_t freqRaw = freqKHZ << 4;
+
+	// Turn off RX and TX
+	PWM_I2C_Queue_Command( RDA1846_CTL_R, 0, 0xFF9F, 0 );
+
+	PWM_I2C_Queue_Command( 0x05, 0x8763, 0xFFFF, 0 );
+
+	// Send top half to high register, bottom half to low
+	PWM_I2C_Queue_Command( RDA1846_FREQ_HI_R, ( 0x3FFF & (freqRaw >> 16 ) ), 0xFFFF, 0 );
+	PWM_I2C_Queue_Command( RDA1846_FREQ_LO_R, ( freqRaw & 0xFFFF ), 0xFFFF, 0 );
+
+	RDA1846_Set_RX();
 }
 
+/*
+ * volume 1: 0-15
+ * volume 2: 0-15
+ */
 void RDA1846_Set_Volume( uint16_t volume1, uint16_t volume2 ) {
+	uint16_t rawVolume = ( volume1 & 0x000F ) << 4;
+	rawVolume |= volume2 & 0x000F;
+	PWM_I2C_Queue_Command( RDA1846_RX_VOLUME_R, rawVolume, 0xFFFF, 0);
 }
 
 void RDA1846_Set_Power( uint8_t power ) {
@@ -141,10 +177,10 @@ void _RDA1846_Init_Complete_Callback() {
 	PWM_I2C_Set_Callback( 0 );
 
 	// Finish setting up the radio
-	RDA1846_Set_Frequency_KHz( 144930 );
-	_RDA1846_Set_RX();
-	// TODO wait
-	// TODO set up squelch
+	RDA1846_Set_Frequency_KHz( 144390 );
+	RDA1846_Set_RX();
+	RDA1846_Set_Volume( 8, 8 );
+	RDA1846_Set_Squelch( 0 ); // off
 }
 
 void RDA1846_Init() {
