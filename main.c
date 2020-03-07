@@ -12,6 +12,7 @@
 
 #include "tm4c123gh6pm.h"
 
+#include "lcd.h"
 #include "ds18b20.h"
 #include "gps.h"
 #include "rda1846.h"
@@ -96,17 +97,60 @@ void Timer1A_Handler() {
 	// Acknowledge interrupt
 	TIMER1_ICR_R = TIMER_ICR_TATOCINT;
 
+	char line1[17];
+	line1[2] = '-';
+	line1[5] = '-';
+	line1[10] = ' ';
+	line1[13] = ':';
+	line1[16] = 0;
+
+	char line2[17];
+	line2[0] = 0;
+	line2[16] = 0;
+
 	PF2 ^= 0x04; // Toggle the LED
 
 	// Every 10 seconds
 	if ( 0 == decimation % 10 ) {
 		if ( ! GPS_Is_Ready() ) {
-			printf( "NO GPS\n" );
+			line1[0] = '#';
+			line1[1] = '#';
+
+			line1[3] = '#';
+			line1[4] = '#';
+
+			line1[6] = '#';
+			line1[7] = '#';
+			line1[8] = '#';
+			line1[9] = '#';
+
+			line1[11] = '#';
+			line1[12] = '#';
+
+			line1[14] = '#';
+			line1[15] = '#';
 		} else {
 			GPS_Get_DateTime( dateString, timeString );
 			GPS_Get_Location( latString, latHem, longString, longHem );
-			printf( "%s %s %s %s %s %s\n", dateString, timeString, latString, latHem, longString, longHem );
+			//sprintf( "%s %s %s %s %s %s\n", dateString, timeString, latString, latHem, longString, longHem );
+			line1[0] = dateString[2];
+			line1[1] = dateString[3];
+
+			line1[3] = dateString[0];
+			line1[4] = dateString[1];
+
+			line1[6] = '2';
+			line1[7] = '0';
+			line1[8] = dateString[4];
+			line1[9] = dateString[5];
+
+			line1[11] = timeString[0];
+			line1[12] = timeString[1];
+
+			line1[14] = timeString[2];
+			line1[15] = timeString[3];
 		}
+		LCD_Write( line1, line2 );
 	}
 
 	// Every 60 seconds
@@ -122,9 +166,13 @@ void Timer1A_Handler() {
 }
 
 int main( void ) {
-	// Initialize the main application polling timer
+	// Initialize the main application leds and polling timer
 	Init();
 	Timer1A_Init();
+
+	// Initialize the LCD
+	LCD_Init();
+	LCD_Backlight_Full();
 
 	// Initialize the thermometer
 	DS18B20_Init();

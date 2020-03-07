@@ -2122,6 +2122,9 @@
         <name>$PROJ_DIR$\gps.c</name>
     </file>
     <file>
+        <name>$PROJ_DIR$\lcd.c</name>
+    </file>
+    <file>
         <name>$PROJ_DIR$\main.c</name>
     </file>
     <file>

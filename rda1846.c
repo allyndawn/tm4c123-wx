@@ -179,7 +179,7 @@ void _RDA1846_Init_Complete_Callback() {
 	// Finish setting up the radio
 	RDA1846_Set_Frequency_KHz( 144390 );
 	RDA1846_Set_RX();
-	RDA1846_Set_Volume( 8, 8 );
+	RDA1846_Set_Volume( 12, 12 );
 	RDA1846_Set_Squelch( 0 ); // off
 }
 
