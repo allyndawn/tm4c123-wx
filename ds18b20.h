@@ -11,8 +11,8 @@
 
 void DS18B20_Init( void );
 
-void DS18B20_InitiateMeasurement( void );
-
-int16_t DS18B20_GetTempTenths( void );
+void DS18B20_Initiate_Measurement();
+void DS18B20_Read_Scratchpad();
+int16_t DS18B20_Get_Temperature_F();
 
 #endif // __DS18B20_H

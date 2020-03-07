@@ -9,6 +9,7 @@
 
 #include "stdint.h"
 #include "stdio.h"
+#include "string.h"
 
 #include "tm4c123gh6pm.h"
 
@@ -24,7 +25,9 @@ char latHem[12];
 char longString[12];
 char longHem[12];
 
-uint8_t decimation = 0;
+int16_t temperatureDegreesF = 0;
+
+uint8_t cycleCount = 0; // 0 to 119
 
 #define PF2 (*((volatile uint32_t *)0x40025010))
 
@@ -93,83 +96,65 @@ void Timer1A_Init() {
 	TIMER1_CTL_R |= TIMER_CTL_TAEN;
 }
 
+/*
+ * Fires twice each second
+ */
 void Timer1A_Handler() {
 	// Acknowledge interrupt
 	TIMER1_ICR_R = TIMER_ICR_TATOCINT;
 
-	char line1[17];
-	line1[2] = '-';
-	line1[5] = '-';
-	line1[10] = ' ';
-	line1[13] = ':';
-	line1[16] = 0;
+	// Toggle the LED on every cycle
+	PF2 ^= 0x04;
 
-	char line2[17];
-	line2[0] = 0;
-	line2[16] = 0;
+	// Every 10th cycle, update the display
+	if ( 0 == cycleCount % 10 ) {
+		char line1[17];
+		char line2[17];
 
-	PF2 ^= 0x04; // Toggle the LED
+		// TODO read thermometer
 
-	// Every 10 seconds
-	if ( 0 == decimation % 10 ) {
-		if ( ! GPS_Is_Ready() ) {
-			line1[0] = '#';
-			line1[1] = '#';
-
-			line1[3] = '#';
-			line1[4] = '#';
-
-			line1[6] = '#';
-			line1[7] = '#';
-			line1[8] = '#';
-			line1[9] = '#';
-
-			line1[11] = '#';
-			line1[12] = '#';
-
-			line1[14] = '#';
-			line1[15] = '#';
+		// Read GPS, build display lines
+		if ( ! GPS_Device_Detected() ) {
+			strcpy( line1, "Looking for GPS" );
+			strcpy( line2, "");
+		} else if ( ! GPS_Data_Valid() ) {
+			strcpy( line1, "Acquiring Sats" );
+			strcpy( line2, "");
 		} else {
-			GPS_Get_DateTime( dateString, timeString );
-			GPS_Get_Location( latString, latHem, longString, longHem );
-			//sprintf( "%s %s %s %s %s %s\n", dateString, timeString, latString, latHem, longString, longHem );
-			line1[0] = dateString[2];
-			line1[1] = dateString[3];
+			uint16_t year;
+			uint8_t month, day, hour, minute, seconds, latDeg, longDeg;
+			char latHem, longHem;
 
-			line1[3] = dateString[0];
-			line1[4] = dateString[1];
-
-			line1[6] = '2';
-			line1[7] = '0';
-			line1[8] = dateString[4];
-			line1[9] = dateString[5];
-
-			line1[11] = timeString[0];
-			line1[12] = timeString[1];
-
-			line1[14] = timeString[2];
-			line1[15] = timeString[3];
+			GPS_Get_Date( &year, &month, &day );
+			GPS_Get_Time( &hour, &minute, &seconds );
+			GPS_Get_Latitude( &latDeg, 0, 0, &latHem );
+			GPS_Get_Longitude( &longDeg, 0, 0, &longHem );
+			sprintf( line1, "%02hu/%02hu/%04u %02u:%02u", month, day, year, hour, minute );
+			sprintf( line2, "%02hu %c %03hu %c", latDeg, latHem, longDeg, longHem );
 		}
+
 		LCD_Write( line1, line2 );
 	}
 
-	// Every 60 seconds
-	if ( 0 == decimation % 60 ) {
-		DS18B20_InitiateMeasurement();
-		// TODO - display last measurement
+	// On six cycles (3 seconds) in, start a new temperature measurement
+	if ( 6 == cycleCount ) {
+		DS18B20_Initiate_Measurement();
 	}
 
-	decimation++;
-	if ( 59 < decimation ) {
-		decimation = 0;
+	// On 12 cycles in (6 seconds), fetch the most recent measurement
+	if ( 12 == cycleCount ) {
+		DS18B20_Read_Scratchpad();
+		temperatureDegreesF = DS18B20_Get_Temperature_F();
+	}
+
+	cycleCount++;
+	// Every 120 cycles (60 seconds) start over again
+	if ( 29 < cycleCount ) {
+		cycleCount = 0;
 	}
 }
 
 int main( void ) {
-	// Initialize the main application leds and polling timer
-	Init();
-	Timer1A_Init();
-
 	// Initialize the LCD
 	LCD_Init();
 	LCD_Backlight_Full();
@@ -182,6 +167,10 @@ int main( void ) {
 
 	// Initialize the Radio
 	RDA1846_Init();
+
+	// Initialize the main application leds and polling timer
+	Init();
+	Timer1A_Init();
 
 	while ( 1 ) {
 	}

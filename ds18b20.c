@@ -11,14 +11,12 @@
 static uint8_t scratchpad[DS18B20_SCRATCHPAD_LENGTH];
 static uint16_t scratchpadByteCount = 0;
 
-static int16_t temperature = DS18B20_NO_READING;
-
 void _DS18B20_Devices_Present_CB( uint8_t data ) {
 	// TODO
 	printf( "_DS18B20_Devices_Present_CB: %hu\n", data );
 }
 
-void _DS18B20_Update_Scratchpad( uint8_t data ) {
+void _DS18B20_Read_Scratchpad_Callback( uint8_t data ) {
 	if ( scratchpadByteCount >= DS18B20_SCRATCHPAD_LENGTH ) {
 		return;
 	}
@@ -28,16 +26,18 @@ void _DS18B20_Update_Scratchpad( uint8_t data ) {
 
 	if ( DS18B20_SCRATCHPAD_LENGTH == scratchpadByteCount ) {
 		// TODO - validate the CRC
-		// TODO Properly calculate the temperature from bytes 0 and 1
-		temperature = scratchpad[1] << 8 | scratchpad[0];
 	}
 }
 
 void DS18B20_Init() {
 	OneWire_Init();
+
+	for ( uint8_t i=0; i < DS18B20_SCRATCHPAD_LENGTH; i++ ) {
+		scratchpad[i] = 0;
+	}
 }
 
-void DS18B20_InitiateMeasurement() {
+void DS18B20_Initiate_Measurement() {
 	// Reset which byte we are working on
 	scratchpadByteCount = 0;
 
@@ -54,7 +54,9 @@ void DS18B20_InitiateMeasurement() {
 	// Wait for conversion to complete
 	// TODO - detect timeout
 	//OneWire_WaitForHigh( 0 );
+}
 
+void DS18B20_Read_Scratchpad() {
 	// Reset the bus
 	OneWire_Reset( 0 );
 
@@ -66,11 +68,14 @@ void DS18B20_InitiateMeasurement() {
 
 	// Read the data
 	for ( uint8_t i=0; i < DS18B20_SCRATCHPAD_LENGTH; i++ ) {
-		OneWire_ReadByte( _DS18B20_Update_Scratchpad );
+		OneWire_ReadByte( _DS18B20_Read_Scratchpad_Callback );
 	}
 }
 
-int16_t DS18B20_GetTempTenths() {
-	return temperature;
+int16_t DS18B20_Get_Temperature_F() {
+	int16_t rawTemp = ( scratchpad[1] << 8 ) | (scratchpad[0] & 0xFF );
+	int16_t tempC = rawTemp / 16;
+	int16_t tempF = ( tempC * 9 / 5 ) + 32;
+	return tempF;
 }
 

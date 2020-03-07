@@ -12,7 +12,7 @@
 void LCD_Init()
 {
 	// Activate SSI0
-	SYSCTL_RCGCSSI_R += 0x01;
+	SYSCTL_RCGCSSI_R |= 0x01;
 
 	// Activate Port A
 	SYSCTL_RCGCGPIO_R |= 0x01;
@@ -56,7 +56,7 @@ void LCD_Out( uint16_t code)
 	{
 	}
 
-	SSI0_DR_R = code; // "Right justified"
+	SSI0_DR_R = code;
 }
 
 void LCD_Write( char *line1, char *line2 ) {
@@ -65,6 +65,10 @@ void LCD_Write( char *line1, char *line2 ) {
 	while ( *line1 ) {
 		LCD_Out( *line1 );
 		line1++;
+	}
+	while ( *line2 ) {
+		LCD_Out( *line2 );
+		line2++;
 	}
 }
 

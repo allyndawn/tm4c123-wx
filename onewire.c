@@ -103,9 +103,9 @@ void _OneWire_Release_Bus() {
 }
 
 uint8_t _OneWire_Sample_Bus() {
-	////if ( PB7 ) {
-	////	return 1;
-	////}
+	if ( PB7 & 0x80 ) {
+		return 1;
+	}
 	return 0;
 }
 
