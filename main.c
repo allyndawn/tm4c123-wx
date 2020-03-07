@@ -18,16 +18,16 @@
 #include "gps.h"
 #include "rda1846.h"
 
-char dateString[12];
-char timeString[12];
-char latString[12];
-char latHem[12];
-char longString[12];
-char longHem[12];
+uint8_t cycleCount = 0; // 0 to 119
+
+uint8_t gpsDataValid = 0;
+uint8_t gpsDeviceDetected = 0;
+
+uint16_t year;
+uint8_t month, day, hour, minute, seconds, latDeg, longDeg;
+char latHem, longHem;
 
 int16_t temperatureDegreesF = 0;
-
-uint8_t cycleCount = 0; // 0 to 119
 
 #define PF2 (*((volatile uint32_t *)0x40025010))
 
@@ -106,34 +106,41 @@ void Timer1A_Handler() {
 	// Toggle the LED on every cycle
 	PF2 ^= 0x04;
 
-	// Every 10th cycle, update the display
+	// TODO read thermometer
+
+	// Update the display on every cycle
+	// (mostly for the flashing colon)
+	char line1[17];
+	char line2[17];
+	char colon = ( cycleCount & 0x01) ? ':' : ' ';
+
+	if ( ! gpsDeviceDetected ) {
+		strcpy( line1, "Looking for GPS" );
+		strcpy( line2, "");
+	} else if ( ! gpsDataValid ) {
+		strcpy( line1, "Acquiring Sats" );
+		strcpy( line2, "");
+	} else {
+		GPS_Get_Date( &year, &month, &day );
+		GPS_Get_Time( &hour, &minute, &seconds );
+		GPS_Get_Latitude( &latDeg, 0, 0, &latHem );
+		GPS_Get_Longitude( &longDeg, 0, 0, &longHem );
+		sprintf( line1, "%02hu/%02hu/%04u %02u%c%02u", month, day, year, hour, colon, minute );
+		sprintf( line2, "%02hu %c %03hu %c", latDeg, latHem, longDeg, longHem );
+	}
+
+	LCD_Write( line1, line2 );
+
+	// Every 10th cycle (5 seconds) update GPS state
 	if ( 0 == cycleCount % 10 ) {
-		char line1[17];
-		char line2[17];
-
-		// TODO read thermometer
-
-		// Read GPS, build display lines
-		if ( ! GPS_Device_Detected() ) {
-			strcpy( line1, "Looking for GPS" );
-			strcpy( line2, "");
-		} else if ( ! GPS_Data_Valid() ) {
-			strcpy( line1, "Acquiring Sats" );
-			strcpy( line2, "");
-		} else {
-			uint16_t year;
-			uint8_t month, day, hour, minute, seconds, latDeg, longDeg;
-			char latHem, longHem;
-
+		gpsDeviceDetected = GPS_Device_Detected();
+		gpsDataValid = GPS_Data_Valid();
+		if ( gpsDataValid ) {
 			GPS_Get_Date( &year, &month, &day );
 			GPS_Get_Time( &hour, &minute, &seconds );
 			GPS_Get_Latitude( &latDeg, 0, 0, &latHem );
 			GPS_Get_Longitude( &longDeg, 0, 0, &longHem );
-			sprintf( line1, "%02hu/%02hu/%04u %02u:%02u", month, day, year, hour, minute );
-			sprintf( line2, "%02hu %c %03hu %c", latDeg, latHem, longDeg, longHem );
 		}
-
-		LCD_Write( line1, line2 );
 	}
 
 	// On six cycles (3 seconds) in, start a new temperature measurement
