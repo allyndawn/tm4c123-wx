@@ -21,7 +21,10 @@
 #define ONEWIRE_TRANSFER_BYTE 0x3
 #define ONEWIRE_WAIT_BUS_HIGH 0x4
 
-#define PB7 (*((volatile uint32_t *)0x40005200))
+// #define PB7 (*((volatile uint32_t *)0x40005200))
+#define PE3 (*((volatile uint32_t *)0x40024020))
+
+#define PF3 (*((volatile uint32_t *)0x40025020))
 
 typedef struct OneWire_Tasks {
 	uint16_t type;
@@ -91,19 +94,30 @@ void _OneWire_Wait( uint32_t microseconds ) {
 
 void _OneWire_Bus_Low() {
 	// Set PB7 as output
-	GPIO_PORTB_DIR_R |= 0x80;
+	//GPIO_PORTB_DIR_R |= 0x80;
+	// Set PE3 as output
+	GPIO_PORTE_DIR_R |= 0x08;
 
 	// Pull PB7 low
-	PB7 = 0;
+	//PB7 = 0;
+	// Pull PE3 low
+	PE3 = 0;
 }
 
 void _OneWire_Release_Bus() {
 	// Set PB7 as input
-	GPIO_PORTB_DIR_R &= ~0x80;
+	// GPIO_PORTB_DIR_R &= ~0x80;
+	// Set PE3 as input
+	GPIO_PORTE_DIR_R &= ~0x08;
 }
 
 uint8_t _OneWire_Sample_Bus() {
-	if ( PB7 & 0x80 ) {
+	//if ( PB7 & 0x80 ) {
+	//	return 1;
+	//}
+	PF3 ^= 0x08;
+	PF3 ^= 0x08;
+	if ( PE3 & 0x08 ) {
 		return 1;
 	}
 	return 0;
@@ -120,16 +134,25 @@ void _OneWire_Write_1_Bit() {
 }
 
 void OneWire_Init( void ) {
-	SYSCTL_RCGCGPIO_R |= 0x02;			// Activate Port B
+	// SYSCTL_RCGCGPIO_R |= 0x02;			// Activate Port B
+	SYSCTL_RCGCGPIO_R |= 0x10;			// Activate Port E
 
 	// Wait for clock to settle
-	while ((SYSCTL_PRGPIO_R & 0x02) != 0x02)
+	//while ((SYSCTL_PRGPIO_R & 0x02) != 0x02)
+	//{
+	//}
+	while ((SYSCTL_PRGPIO_R & 0x10) != 0x10)
 	{
 	}
 
-	GPIO_PORTB_DIR_R &= ~0x80;			// Set PB7 as input
-	GPIO_PORTB_DEN_R |= 0x80;			// Enable digital I/O for PB7
-	GPIO_PORTB_PUR_R |= 0x80;			// Enable weak pull up for PB7
+	//GPIO_PORTB_DIR_R &= ~0x80;			// Set PB7 as input
+	GPIO_PORTE_DIR_R &= ~0x08;			// Set PE3 as input
+
+	//GPIO_PORTB_DEN_R |= 0x80;			// Enable digital I/O for PB7
+	GPIO_PORTE_DEN_R |= 0x08;			// Enable digital I/O for PE3
+
+	//GPIO_PORTB_PUR_R |= 0x80;			// Enable weak pull up for PB7
+	GPIO_PORTE_PUR_R |= 0x08;			// Enable weak pull up for PE3
 
 	// Start task queue processing
 	_OneWire_Wait( 1000 );
@@ -208,8 +231,8 @@ void OneWire_WriteByte( uint8_t data ) {
 void OneWire_ReadByte( void (*callback)(uint8_t data) ) {
 	for ( uint8_t i=0; i < 8; i++ ) {
 		_OneWire_AddTask( ONEWIRE_BUS_LOW, 5, 0 );
-		_OneWire_AddTask( ONEWIRE_RELEASE_BUS, 10, 0 );
-		_OneWire_AddTask( ONEWIRE_SAMPLE_BUS, 55, 0 );
+		_OneWire_AddTask( ONEWIRE_RELEASE_BUS, 5, 0 );
+		_OneWire_AddTask( ONEWIRE_SAMPLE_BUS, 60, 0 );
 	}
 	_OneWire_AddTask( ONEWIRE_TRANSFER_BYTE, 0, callback );
 }

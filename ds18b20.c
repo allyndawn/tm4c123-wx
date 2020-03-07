@@ -8,8 +8,15 @@
 #include "stdio.h" // TODO REMOVE AFTER DEBUGGING
 
 #define DS18B20_SCRATCHPAD_LENGTH 9
+
+static uint8_t ds18b20DataValid = 0;
+
 static uint8_t scratchpad[DS18B20_SCRATCHPAD_LENGTH];
 static uint16_t scratchpadByteCount = 0;
+
+uint8_t DS18B20_Data_Valid() {
+	return ds18b20DataValid;
+}
 
 void _DS18B20_Devices_Present_CB( uint8_t data ) {
 	// TODO
@@ -26,10 +33,17 @@ void _DS18B20_Read_Scratchpad_Callback( uint8_t data ) {
 
 	if ( DS18B20_SCRATCHPAD_LENGTH == scratchpadByteCount ) {
 		// TODO - validate the CRC
+		if ( DS18B20_Get_Temperature_F() < 150 ) {
+			ds18b20DataValid = 1;
+		} else {
+			ds18b20DataValid = 0;
+		}
 	}
 }
 
 void DS18B20_Init() {
+	ds18b20DataValid = 0;
+
 	OneWire_Init();
 
 	for ( uint8_t i=0; i < DS18B20_SCRATCHPAD_LENGTH; i++ ) {
@@ -38,9 +52,6 @@ void DS18B20_Init() {
 }
 
 void DS18B20_Initiate_Measurement() {
-	// Reset which byte we are working on
-	scratchpadByteCount = 0;
-
 	// Reset the one-wire bus
 	// TODO - detect no devices
 	OneWire_Reset( 0 );
@@ -57,6 +68,9 @@ void DS18B20_Initiate_Measurement() {
 }
 
 void DS18B20_Read_Scratchpad() {
+	// Reset which byte we are working on
+	scratchpadByteCount = 0;
+
 	// Reset the bus
 	OneWire_Reset( 0 );
 

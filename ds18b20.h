@@ -12,6 +12,7 @@
 void DS18B20_Init( void );
 
 void DS18B20_Initiate_Measurement();
+uint8_t DS18B20_Data_Valid();
 void DS18B20_Read_Scratchpad();
 int16_t DS18B20_Get_Temperature_F();
 

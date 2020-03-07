@@ -23,6 +23,8 @@ uint8_t cycleCount = 0; // 0 to 119
 uint8_t gpsDataValid = 0;
 uint8_t gpsDeviceDetected = 0;
 
+uint8_t thermometerDataValid = 0;
+
 uint16_t year;
 uint8_t month, day, hour, minute, seconds, latDeg, longDeg;
 char latHem, longHem;
@@ -42,9 +44,13 @@ void Init() {
 
 	// Set PF2 for out
 	GPIO_PORTF_DIR_R |= 0x04;
+	// Set PF3 for out
+	GPIO_PORTF_DIR_R |= 0x08;
 
 	// Enable digital I/O on PF2
 	GPIO_PORTF_DEN_R |= 0x04;
+	// Enable digital I/O on PF3
+	GPIO_PORTF_DEN_R |= 0x08;
 
 	// Turn the LED on
 	PF2 = 0x04;
@@ -108,7 +114,7 @@ void Timer1A_Handler() {
 
 	// TODO read thermometer
 
-	// Every 10th cycle (5 seconds) update GPS state
+	// Every 10th cycle (5 seconds) update GPS and therm state
 	if ( 0 == cycleCount % 10 ) {
 		gpsDeviceDetected = GPS_Device_Detected();
 		gpsDataValid = GPS_Data_Valid();
@@ -117,6 +123,11 @@ void Timer1A_Handler() {
 			GPS_Get_Time( &hour, &minute, &seconds );
 			GPS_Get_Latitude( &latDeg, 0, 0, &latHem );
 			GPS_Get_Longitude( &longDeg, 0, 0, &longHem );
+		}
+
+		thermometerDataValid = DS18B20_Data_Valid();
+		if ( thermometerDataValid ) {
+			temperatureDegreesF = DS18B20_Get_Temperature_F();
 		}
 	}
 
@@ -137,21 +148,24 @@ void Timer1A_Handler() {
 			GPS_Get_Latitude( &latDeg, 0, 0, &latHem );
 			GPS_Get_Longitude( &longDeg, 0, 0, &longHem );
 			sprintf( line1, "%02hu/%02hu/%04u %02u:%02u", month, day, year, hour, minute );
-			sprintf( line2, "%02hu %c %03hu %c", latDeg, latHem, longDeg, longHem );
+			if ( DS18B20_Data_Valid() ) {
+				sprintf( line2, "%02hu %c %03hu %c %3d F", latDeg, latHem, longDeg, longHem, temperatureDegreesF );
+			} else {
+				sprintf( line2, "%02hu %c %03hu %c --- F", latDeg, latHem, longDeg, longHem );
+			}
 		}
 
 		LCD_Write( line1, line2 );
 	}
 
 	// On six cycles (3 seconds) in, start a new temperature measurement
-	if ( 6 == cycleCount ) {
+	if ( cycleCount % 6 ) {
 		DS18B20_Initiate_Measurement();
 	}
 
 	// On 12 cycles in (6 seconds), fetch the most recent measurement
 	if ( 12 == cycleCount ) {
 		DS18B20_Read_Scratchpad();
-		temperatureDegreesF = DS18B20_Get_Temperature_F();
 	}
 
 	cycleCount++;
