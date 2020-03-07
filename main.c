@@ -108,29 +108,6 @@ void Timer1A_Handler() {
 
 	// TODO read thermometer
 
-	// Update the display on every cycle
-	// (mostly for the flashing colon)
-	char line1[17];
-	char line2[17];
-	char colon = ( cycleCount & 0x01) ? ':' : ' ';
-
-	if ( ! gpsDeviceDetected ) {
-		strcpy( line1, "Looking for GPS" );
-		strcpy( line2, "");
-	} else if ( ! gpsDataValid ) {
-		strcpy( line1, "Acquiring Sats" );
-		strcpy( line2, "");
-	} else {
-		GPS_Get_Date( &year, &month, &day );
-		GPS_Get_Time( &hour, &minute, &seconds );
-		GPS_Get_Latitude( &latDeg, 0, 0, &latHem );
-		GPS_Get_Longitude( &longDeg, 0, 0, &longHem );
-		sprintf( line1, "%02hu/%02hu/%04u %02u%c%02u", month, day, year, hour, colon, minute );
-		sprintf( line2, "%02hu %c %03hu %c", latDeg, latHem, longDeg, longHem );
-	}
-
-	LCD_Write( line1, line2 );
-
 	// Every 10th cycle (5 seconds) update GPS state
 	if ( 0 == cycleCount % 10 ) {
 		gpsDeviceDetected = GPS_Device_Detected();
@@ -141,6 +118,29 @@ void Timer1A_Handler() {
 			GPS_Get_Latitude( &latDeg, 0, 0, &latHem );
 			GPS_Get_Longitude( &longDeg, 0, 0, &longHem );
 		}
+	}
+
+	// Update the display every 10 seconds
+	if ( 0 == cycleCount % 20 ) {
+		char line1[17];
+		char line2[17];
+
+		if ( ! gpsDeviceDetected ) {
+			strcpy( line1, "Looking for GPS" );
+			strcpy( line2, "");
+		} else if ( ! gpsDataValid ) {
+			strcpy( line1, "Acquiring Sats" );
+			strcpy( line2, "");
+		} else {
+			GPS_Get_Date( &year, &month, &day );
+			GPS_Get_Time( &hour, &minute, &seconds );
+			GPS_Get_Latitude( &latDeg, 0, 0, &latHem );
+			GPS_Get_Longitude( &longDeg, 0, 0, &longHem );
+			sprintf( line1, "%02hu/%02hu/%04u %02u:%02u", month, day, year, hour, minute );
+			sprintf( line2, "%02hu %c %03hu %c", latDeg, latHem, longDeg, longHem );
+		}
+
+		LCD_Write( line1, line2 );
 	}
 
 	// On six cycles (3 seconds) in, start a new temperature measurement
